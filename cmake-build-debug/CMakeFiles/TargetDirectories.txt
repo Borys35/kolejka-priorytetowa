@@ -1,3 +1,0 @@
-/mnt/c/Users/borys/CLionProjects/priority_queue_impl/cmake-build-debug/CMakeFiles/priority_queue_impl.dir
-/mnt/c/Users/borys/CLionProjects/priority_queue_impl/cmake-build-debug/CMakeFiles/edit_cache.dir
-/mnt/c/Users/borys/CLionProjects/priority_queue_impl/cmake-build-debug/CMakeFiles/rebuild_cache.dir
