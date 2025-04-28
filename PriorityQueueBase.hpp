@@ -17,6 +17,6 @@ public:
     virtual void modify_key(T e, T p) = 0;
     virtual void return_size() = 0;
 
-private:
+protected:
     int size = 0;
 };
