@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PriorityQueueBase.hpp"
+#include "ArrayList.hpp"
 
 template <class T>
 class HeapPriorityQueue : public PriorityQueueBase<T> {
@@ -12,10 +13,10 @@ public:
     void return_size() override;
 
 private:
-  void heapify(int i);
-  void build_max_heap();
-  void swap(PriorityQueueItem<T>& a, PriorityQueueItem<T>& b);
-  PriorityQueueItem<T> heap_arr[32];
+    void heapify(int i);
+    void build_max_heap();
+    void swap(PriorityQueueItem<T>& a, PriorityQueueItem<T>& b);
+    ArrayList<PriorityQueueItem<T>> heap;
 };
 
 template <class T>
@@ -24,15 +25,15 @@ void HeapPriorityQueue<T>::heapify(int i) {
     int l = 2 * i + 1;
     int r = 2 * i + 2;
 
-    if (l < this->size && heap_arr[l] > heap_arr[i]) {
+    if (l < this->size && heap.get(l) > heap.get(largest)) {
         largest = l;
     }
-    if (r < this->size & heap_arr[r] > heap_arr[largest]) {
+    if (r < this->size & heap[r] > heap.get(largest)) {
         largest = r;
     }
 
     if (largest != i) {
-        swap(heap_arr[i], heap_arr[largest]);
+        swap(heap.get(i), heap.get(largest));
         heapify(largest);
     }
 }
@@ -40,7 +41,7 @@ void HeapPriorityQueue<T>::heapify(int i) {
 template <class T>
 void HeapPriorityQueue<T>::build_max_heap() {
     for (int i = this->size / 2 - 1; i >= 0; i--) {
-      heapify(i);
+        heapify(i);
     }
 }
 
