@@ -9,6 +9,7 @@ public:
     virtual void push_front(T value) = 0;
     // dodaje na koncu
     virtual void push_back(T value) = 0;
+    virtual T pop_back() = 0;
     // dodaje na wybranym indeksie
     virtual void insert(T value, int index) = 0;
     virtual T remove_front() = 0;

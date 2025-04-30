@@ -9,6 +9,7 @@ public:
     ~ArrayList();
     void push_front(T value) override;
     void push_back(T value) override;
+    T pop_back() override;
     void insert(T value, int index) override;
     T remove_front() override;
     T remove_back() override;
@@ -74,6 +75,18 @@ void ArrayList<T>::push_front(T value) {
         array[i] = array[i - 1];
     }
     array[0] = value;
+}
+
+template<class T>
+T ArrayList<T>::pop_back() {
+	size--;
+	if (size < 1) {
+		//error
+		return -1;
+	}
+	T value = array[size - 1];
+	array[size - 1] = 0;
+	return value;
 }
 
 template<class T>
