@@ -7,8 +7,8 @@ template <class T>
 class HeapPriorityQueue : public PriorityQueueBase<T> {
 public:
     void insert(T e, T p) override;
-    void extract_max() override;
-    void find_max() override;
+    T extract_max() override;
+    T find_max() override;
     void modify_key(T e, T p) override;
     void return_size() override;
 
@@ -50,4 +50,40 @@ void HeapPriorityQueue<T>::swap(PriorityQueueItem<T>& a, PriorityQueueItem<T>& b
   T temp = a;
   a = b;
   b = temp;
+}
+
+template <class T>
+void HeapPriorityQueue<T>::insert(T e, T p) {
+	PriorityQueueItem<T> item;
+	item.value = e;
+	item.priority = p;
+
+	heap.push_back(item);
+
+	build_max_heap();
+}
+
+template <class T>
+T HeapPriorityQueue<T>::extract_max() {
+	swap(heap.get(0), heap.get(heap.size - 1));
+	T max = heap.pop_back();
+	build_max_heap();
+	return max;
+}
+
+template <class T>
+T HeapPriorityQueue<T>::find_max() {
+	return heap.get(0);
+}
+
+template <class T>
+void HeapPriorityQueue<T>::modify_key(T e, T p) {
+PriorityQueueItem<T> item;
+item.value = e;
+item.priority = p;
+}
+
+template <class T>
+void HeapPriorityQueue<T>::return_size() {
+	return heap.count();
 }
