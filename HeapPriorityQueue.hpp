@@ -78,9 +78,9 @@ T HeapPriorityQueue<T>::find_max() {
 
 template <class T>
 void HeapPriorityQueue<T>::modify_key(T e, T p) {
-PriorityQueueItem<T> item;
-item.value = e;
-item.priority = p;
+    PriorityQueueItem<T> item;
+    item.value = e;
+    item.priority = p;
 }
 
 template <class T>

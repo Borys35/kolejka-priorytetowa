@@ -4,6 +4,26 @@ template<typename T>
 struct PriorityQueueItem {
     T value;
     T priority;
+
+    bool operator==(const PriorityQueueItem &a) const {
+        return value == a.value;
+    }
+
+    bool operator<(const PriorityQueueItem &a) const {
+        return priority < a.priority;
+    }
+
+    bool operator>(const PriorityQueueItem &a) const {
+        return priority > a.priority;
+    }
+
+    bool operator<=(const PriorityQueueItem &a) const {
+        return priority <= a.priority;
+    }
+
+    bool operator>=(const PriorityQueueItem &a) const {
+        return priority >= a.priority;
+    }
 };
 
 template<class T>
