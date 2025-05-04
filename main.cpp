@@ -2,6 +2,7 @@
 #include "HeapPriorityQueue.hpp"
 
 int main() {
+    /*
     std::cout << "Heap Priority Queue!" << std::endl;
 
     HeapPriorityQueue<int> heapQueue;
@@ -34,6 +35,10 @@ int main() {
     heapQueue.modify_key(5, 1);
     max_v = heapQueue.find_max();
     std::cout << "Value with max priority after modifying: " << max_v << std::endl;
+    */
+
+
+
 
     return 0;
 }
