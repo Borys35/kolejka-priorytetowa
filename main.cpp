@@ -1,5 +1,6 @@
 #include <iostream>
 #include "HeapPriorityQueue.hpp"
+#include "Menu.h"
 
 int main() {
     /*
@@ -39,6 +40,9 @@ int main() {
 
 
 
-
+    srand(time(nullptr));
+    std::cout << "Program do testowania struktur danych - kolejki\n";
+    std::cout << "=============================================\n\n";
+    runMenu();
     return 0;
 }

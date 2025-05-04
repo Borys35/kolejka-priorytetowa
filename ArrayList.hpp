@@ -145,5 +145,5 @@ int ArrayList<T>::search(T value) {
             return i;
         }
     }
-    throw std::out_of_range("ArrayList");
+    return -1;
 }

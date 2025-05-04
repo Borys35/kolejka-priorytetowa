@@ -37,8 +37,12 @@ void generateTests() {
                 int *valueArray = new int[size];
                 int *priorityArray = new int[size];
 
+                // Ustawiamy inny seed dla każdego przypadku
+                srand(time(nullptr));
+
                 fillArray(valueArray, priorityArray, size);
 
+                // TODO: zmienic logike. dodajemy wszystkie elementy do tablicy i tworzymy kopiec typu max na koncu
                 arrayToList(size, valueArray, priorityArray, [&](int v, int p) { heapQueue.insert(v, p); });
 //                arrayToList(size, baseArray, [&](int value) { singlyLinkedList.push_back(value); });
 //                arrayToList(size, baseArray, [&](int value) { doublyLinkedList.push_back(value); });

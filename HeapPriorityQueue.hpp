@@ -14,6 +14,7 @@ public:
 
 private:
     void heapify(int i);
+    void heapify_up(int i);
     void build_max_heap();
     void swap(PriorityQueueItem<T>& a, PriorityQueueItem<T>& b);
     ArrayList<PriorityQueueItem<T>> heap;
@@ -38,6 +39,16 @@ void HeapPriorityQueue<T>::heapify(int i) {
     }
 }
 
+template<class T>
+void HeapPriorityQueue<T>::heapify_up(int i) {
+    int largest = (i - 1) / 2;
+    if (i > 0 && heap.get(i) > heap.get(largest)) {
+        swap(heap.get(i), heap.get(largest));
+        heapify_up(largest);
+    }
+}
+
+
 template <class T>
 void HeapPriorityQueue<T>::build_max_heap() {
     for (int i = heap.count() / 2 - 1; i >= 0; i--) {
@@ -58,7 +69,7 @@ void HeapPriorityQueue<T>::insert(T e, T p) {
 
 	heap.push_back(item);
 
-	build_max_heap();
+	heapify_up(heap.count() - 1);
 }
 
 template <class T>
@@ -66,7 +77,7 @@ T HeapPriorityQueue<T>::extract_max() {
 	swap(heap.get(0), heap.get(heap.count() - 1));
 	PriorityQueueItem<T> max = heap.pop_back();
 
-	build_max_heap();
+	heapify(0);
 
 	return max.value;
 }
@@ -80,9 +91,17 @@ template <class T>
 void HeapPriorityQueue<T>::modify_key(T e, T p) {
     int index = heap.search({e, p});
 
-    heap.get(index).priority = p;
+    if (index != -1) {
+        int oldPriority = heap.get(index).priority;
 
-    build_max_heap();
+        heap.get(index).priority = p;
+
+        if (p > oldPriority) {
+            heapify_up(index);
+        } else {
+            heapify(index);
+        }
+    }
 }
 
 template <class T>

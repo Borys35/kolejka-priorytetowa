@@ -5,8 +5,6 @@
 #include <iostream>
 #include <string>
 #include "ArrayList.hpp"
-#include "SinglyLinkedList.h"
-#include "DoublyLinkedList.hpp"
 #include "TestGenerator.hpp"
 
 void showMenu() {
@@ -167,6 +165,7 @@ void runMenu() {
                 generateTests();
                 break;
 
+/*
             case 2: {
                 std::cout << "Wybrano operacje na ArrayList\n";
                 ArrayList<int> arrayList;
@@ -187,6 +186,8 @@ void runMenu() {
                 performListOperations(doublyLinkedList, "DoublyLinkedList");
                 break;
             }
+
+ */
 
             case 0:
                 std::cout << "Koniec programu.\n";
