@@ -10,7 +10,7 @@ public:
     T extract_max() override;
     T find_max() override;
     void modify_key(T e, T p) override;
-    void return_size() override;
+    T return_size() override;
 
 private:
     void heapify(int i);
@@ -25,10 +25,10 @@ void HeapPriorityQueue<T>::heapify(int i) {
     int l = 2 * i + 1;
     int r = 2 * i + 2;
 
-    if (l < this->size && heap.get(l) > heap.get(largest)) {
+    if (l < heap.count() && heap.get(l) > heap.get(largest)) {
         largest = l;
     }
-    if (r < this->size & heap[r] > heap.get(largest)) {
+    if (r < heap.count() && heap.get(r) > heap.get(largest)) {
         largest = r;
     }
 
@@ -40,23 +40,21 @@ void HeapPriorityQueue<T>::heapify(int i) {
 
 template <class T>
 void HeapPriorityQueue<T>::build_max_heap() {
-    for (int i = this->size / 2 - 1; i >= 0; i--) {
+    for (int i = heap.count() / 2 - 1; i >= 0; i--) {
         heapify(i);
     }
 }
 
 template <class T>
 void HeapPriorityQueue<T>::swap(PriorityQueueItem<T>& a, PriorityQueueItem<T>& b) {
-  T temp = a;
+  PriorityQueueItem<T> temp = a;
   a = b;
   b = temp;
 }
 
 template <class T>
 void HeapPriorityQueue<T>::insert(T e, T p) {
-	PriorityQueueItem<T> item;
-	item.value = e;
-	item.priority = p;
+	PriorityQueueItem<T> item = {e, p};
 
 	heap.push_back(item);
 
@@ -65,25 +63,29 @@ void HeapPriorityQueue<T>::insert(T e, T p) {
 
 template <class T>
 T HeapPriorityQueue<T>::extract_max() {
-	swap(heap.get(0), heap.get(heap.size - 1));
-	T max = heap.pop_back();
+	swap(heap.get(0), heap.get(heap.count() - 1));
+	PriorityQueueItem<T> max = heap.pop_back();
+
 	build_max_heap();
-	return max;
+
+	return max.value;
 }
 
 template <class T>
 T HeapPriorityQueue<T>::find_max() {
-	return heap.get(0);
+	return heap.get(0).value;
 }
 
 template <class T>
 void HeapPriorityQueue<T>::modify_key(T e, T p) {
-    PriorityQueueItem<T> item;
-    item.value = e;
-    item.priority = p;
+    int index = heap.search({e, p});
+
+    heap.get(index).priority = p;
+
+    build_max_heap();
 }
 
 template <class T>
-void HeapPriorityQueue<T>::return_size() {
+T HeapPriorityQueue<T>::return_size() {
 	return heap.count();
 }

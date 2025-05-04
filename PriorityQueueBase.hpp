@@ -3,7 +3,7 @@
 template<typename T>
 struct PriorityQueueItem {
     T value;
-    T priority;
+    int priority;
 
     bool operator==(const PriorityQueueItem &a) const {
         return value == a.value;
@@ -32,11 +32,8 @@ public:
     virtual ~PriorityQueueBase() = default;
 
     virtual void insert(T e, T p) = 0;
-    virtual void extract_max() = 0;
-    virtual void find_max() = 0;
+    virtual T extract_max() = 0;
+    virtual T find_max() = 0;
     virtual void modify_key(T e, T p) = 0;
-    virtual void return_size() = 0;
-
-protected:
-    int size = 0;
+    virtual T return_size() = 0;
 };
