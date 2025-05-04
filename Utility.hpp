@@ -4,16 +4,17 @@
 // typedef std::chrono::high_resolution_clock Clock;
 using Clock = std::chrono::steady_clock;
 
-inline void fillArray(int* arr, int n) {
+inline void fillArray(int* arr1, int* arr2, int n) {
     for (int i = 0; i < n; i++) {
-        arr[i] = rand() % 1001;
+        arr1[i] = rand() % 1001;
+        arr2[i] = rand() % 10001;
     }
 }
 
 template<typename Func>
-inline void arrayToList(int n, int arr[], const Func& push) {
+inline void arrayToList(int n, int arr1[], int arr2[], const Func& push) {
     for (int i = 0; i < n; i++) {
-        push(arr[i]);
+        push(arr1[i], arr2[i]);
     }
 }
 

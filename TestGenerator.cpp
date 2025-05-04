@@ -31,99 +31,54 @@ void generateTests() {
 //                SinglyLinkedList<int> singlyLinkedList;
 //                DoublyLinkedList<int> doublyLinkedList;
 
-                HeapPriorityQueue<int> maxHeap;
+                HeapPriorityQueue<int> heapQueue;
 
                 // Inicjalizacja list
-                int *baseArray = new int[size];
-                fillArray(baseArray, size);
+                int *valueArray = new int[size];
+                int *priorityArray = new int[size];
 
-                arrayToList(size, baseArray, [&](int value) { arrayList.push_back(value); });
-                arrayToList(size, baseArray, [&](int value) { singlyLinkedList.push_back(value); });
-                arrayToList(size, baseArray, [&](int value) { doublyLinkedList.push_back(value); });
+                fillArray(valueArray, priorityArray, size);
 
-                int randomValue = rand() % 1001;
-                int randomIndex = rand() % size;
+                arrayToList(size, valueArray, priorityArray, [&](int v, int p) { heapQueue.insert(v, p); });
+//                arrayToList(size, baseArray, [&](int value) { singlyLinkedList.push_back(value); });
+//                arrayToList(size, baseArray, [&](int value) { doublyLinkedList.push_back(value); });
+
+                int rValue = rand() % 1001;
+                int rPriority = rand() % 10001;
 
                 // Wartość do wyszukania - losowa wartość z tablicy lub spoza tablicy
-                int valueToSearch;
-                if (rand() % 2 == 0) {
-                    // Wybierz losowy element z tablicy
-                    valueToSearch = baseArray[rand() % size];
-                } else {
-                    // Wygeneruj prawdopodobnie nieistniejącą wartość
-                    valueToSearch = 1001 + rand() % 1000;
-                }
+//                int valueToSearch;
+//                if (rand() % 2 == 0) {
+//                    // Wybierz losowy element z tablicy
+//                    valueToSearch = baseArray[rand() % size];
+//                } else {
+//                    // Wygeneruj prawdopodobnie nieistniejącą wartość
+//                    valueToSearch = 1001 + rand() % 1000;
+//                }
 
                 // ArrayList
-                long long durationArray;
-                if (operacja == "push_back") {
-                    durationArray = measureTime([&]() { arrayList.push_back(randomValue); });
-                } else if (operacja == "push_front") {
-                    durationArray = measureTime([&]() { arrayList.push_front(randomValue); });
-                } else if (operacja == "insert") {
-                    durationArray = measureTime([&]() { arrayList.insert(randomValue, randomIndex); });
-                } else if (operacja == "remove_back") {
-                    durationArray = measureTime([&]() { arrayList.remove_back(); });
-                } else if (operacja == "remove_front") {
-                    durationArray = measureTime([&]() { arrayList.remove_front(); });
-                } else if (operacja == "remove") {
-                    durationArray = measureTime([&]() { arrayList.remove(randomIndex); });
-                } else if (operacja == "get") {
-                    durationArray = measureTime([&]() { arrayList.get(randomIndex); });
-                } else if (operacja == "search") {
-                    durationArray = measureTime([&]() { arrayList.search(valueToSearch); });
+                long long durationHeap;
+                if (operacja == "insert") {
+                    durationHeap = measureTime([&]() { heapQueue.insert(rValue, rPriority); });
+                } else if (operacja == "extract_max") {
+                    durationHeap = measureTime([&]() { heapQueue.extract_max(); });
+                } else if (operacja == "find_max") {
+                    durationHeap = measureTime([&]() { heapQueue.find_max(); });
+                } else if (operacja == "modify_key") {
+                    durationHeap = measureTime([&]() { heapQueue.modify_key(rValue, rPriority); });
+                } else if (operacja == "return_size") {
+                    durationHeap = measureTime([&]() { heapQueue.return_size(); });
                 } else {
-                    durationArray = 0;
+                    durationHeap = 0;
                 }
-                file << durationArray << ",";
+                file << durationHeap << ",";
 
-                // SinglyLinkedList
-                long long durationSingly;
-                if (operacja == "push_back") {
-                    durationSingly = measureTime([&]() { singlyLinkedList.push_back(randomValue); });
-                } else if (operacja == "push_front") {
-                    durationSingly = measureTime([&]() { singlyLinkedList.push_front(randomValue); });
-                } else if (operacja == "insert") {
-                    durationSingly = measureTime([&]() { singlyLinkedList.insert(randomValue, randomIndex); });
-                } else if (operacja == "remove_back") {
-                    durationSingly = measureTime([&]() { singlyLinkedList.remove_back(); });
-                } else if (operacja == "remove_front") {
-                    durationSingly = measureTime([&]() { singlyLinkedList.remove_front(); });
-                } else if (operacja == "remove") {
-                    durationSingly = measureTime([&]() { singlyLinkedList.remove(randomIndex); });
-                } else if (operacja == "get") {
-                    durationSingly = measureTime([&]() { singlyLinkedList.get(randomIndex); });
-                } else if (operacja == "search") {
-                    durationSingly = measureTime([&]() { singlyLinkedList.search(valueToSearch); });
-                } else {
-                    durationSingly = 0;
-                }
-                file << durationSingly << ",";
 
-                // DoublyLinkedList
-                long long durationDoubly;
-                if (operacja == "push_back") {
-                    durationDoubly = measureTime([&]() { doublyLinkedList.push_back(randomValue); });
-                } else if (operacja == "push_front") {
-                    durationDoubly = measureTime([&]() { doublyLinkedList.push_front(randomValue); });
-                } else if (operacja == "insert") {
-                    durationDoubly = measureTime([&]() { doublyLinkedList.insert(randomValue, randomIndex); });
-                } else if (operacja == "remove_back") {
-                    durationDoubly = measureTime([&]() { doublyLinkedList.remove_back(); });
-                } else if (operacja == "remove_front") {
-                    durationDoubly = measureTime([&]() { doublyLinkedList.remove_front(); });
-                } else if (operacja == "remove") {
-                    durationDoubly = measureTime([&]() { doublyLinkedList.remove(randomIndex); });
-                } else if (operacja == "get") {
-                    durationDoubly = measureTime([&]() { doublyLinkedList.get(randomIndex); });
-                } else if (operacja == "search") {
-                    durationDoubly = measureTime([&]() { doublyLinkedList.search(valueToSearch); });
-                } else {
-                    durationDoubly = 0;
-                }
-                file << durationDoubly << "\n";
+                file << "0\n";
 
-                delete[] baseArray;
+
+                delete [] valueArray;
+                delete [] priorityArray;
             }
             std::cout << "Zakonczono testy dla operacji " << operacja << " na rozmiarze " << size << std::endl;
         }
