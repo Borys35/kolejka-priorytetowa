@@ -9,4 +9,5 @@ add_executable(priority_queue_impl main.cpp
         Menu.h
         TestGenerator.cpp
         TestGenerator.hpp
-        Utility.hpp)
+        Utility.hpp
+        ArrayPriorityQueue.hpp)

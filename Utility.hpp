@@ -1,8 +1,8 @@
 #pragma once
 
 #include <chrono>
-// typedef std::chrono::high_resolution_clock Clock;
-using Clock = std::chrono::steady_clock;
+typedef std::chrono::high_resolution_clock Clock;
+// using Clock = std::chrono::steady_clock;
 
 inline void fillArray(int* arr1, int* arr2, int n) {
     for (int i = 0; i < n; i++) {

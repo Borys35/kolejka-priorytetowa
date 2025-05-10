@@ -1,7 +1,5 @@
-//
-// Created by User on 14.04.2025.
-//
 #include "TestGenerator.hpp"
+#include "ArrayPriorityQueue.hpp"
 #include "HeapPriorityQueue.hpp"
 
 void generateTests() {
@@ -27,11 +25,8 @@ void generateTests() {
             for (int j = 0; j < 100; j++) {
                 file << j + 1 << "," << size << "," << operacja << ",";
 
-//                ArrayList<int> arrayList;
-//                SinglyLinkedList<int> singlyLinkedList;
-//                DoublyLinkedList<int> doublyLinkedList;
-
                 HeapPriorityQueue<int> heapQueue;
+                ArrayPriorityQueue<int> arrayQueue;
 
                 // Inicjalizacja list
                 int *valueArray = new int[size];
@@ -42,25 +37,13 @@ void generateTests() {
 
                 fillArray(valueArray, priorityArray, size);
 
-                // TODO: zmienic logike. dodajemy wszystkie elementy do tablicy i tworzymy kopiec typu max na koncu
                 arrayToList(size, valueArray, priorityArray, [&](int v, int p) { heapQueue.insert(v, p); });
-//                arrayToList(size, baseArray, [&](int value) { singlyLinkedList.push_back(value); });
-//                arrayToList(size, baseArray, [&](int value) { doublyLinkedList.push_back(value); });
+                arrayToList(size, valueArray, priorityArray, [&](int v, int p) { arrayQueue.insert(v, p); });
 
                 int rValue = rand() % 1001;
                 int rPriority = rand() % 10001;
 
-                // Wartość do wyszukania - losowa wartość z tablicy lub spoza tablicy
-//                int valueToSearch;
-//                if (rand() % 2 == 0) {
-//                    // Wybierz losowy element z tablicy
-//                    valueToSearch = baseArray[rand() % size];
-//                } else {
-//                    // Wygeneruj prawdopodobnie nieistniejącą wartość
-//                    valueToSearch = 1001 + rand() % 1000;
-//                }
-
-                // ArrayList
+                // Heap Priority Queue
                 long long durationHeap;
                 if (operacja == "insert") {
                     durationHeap = measureTime([&]() { heapQueue.insert(rValue, rPriority); });
@@ -77,9 +60,22 @@ void generateTests() {
                 }
                 file << durationHeap << ",";
 
-
-                file << "0\n";
-
+                // Array Priority Queue
+                long long durationArray;
+                if (operacja == "insert") {
+                    durationArray = measureTime([&]() { arrayQueue.insert(rValue, rPriority); });
+                } else if (operacja == "extract_max") {
+                    durationArray = measureTime([&]() { arrayQueue.extract_max(); });
+                } else if (operacja == "find_max") {
+                    durationArray = measureTime([&]() { arrayQueue.find_max(); });
+                } else if (operacja == "modify_key") {
+                    durationArray = measureTime([&]() { arrayQueue.modify_key(rValue, rPriority); });
+                } else if (operacja == "return_size") {
+                    durationArray = measureTime([&]() { arrayQueue.return_size(); });
+                } else {
+                    durationArray = 0;
+                }
+                file << durationArray << "\n";
 
                 delete [] valueArray;
                 delete [] priorityArray;

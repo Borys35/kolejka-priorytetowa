@@ -10,9 +10,8 @@
 void showMenu() {
     std::cout << "====== MENU ======\n";
     std::cout << "1. Uruchom testy dla wszystkich struktur\n";
-    std::cout << "2. Operacje na ArrayList\n";
-    std::cout << "3. Operacje na SinglyLinkedList\n";
-    std::cout << "4. Operacje na DoublyLinkedList\n";
+    // std::cout << "2. Operacje na Heap Priority Queue\n";
+    // std::cout << "3. Operacje na Array Priority Queue\n";
     std::cout << "0. Wyjscie\n";
     std::cout << "Wybierz opcje: ";
 }
