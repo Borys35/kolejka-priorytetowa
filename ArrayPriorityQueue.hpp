@@ -6,50 +6,58 @@
 template <class T>
 class ArrayPriorityQueue : public PriorityQueueBase<T> {
 public:
-    void insert(T e, T p) override;
-    T extract_max() override;
-    T find_max() override;
-    void modify_key(T e, T p) override;
-    T return_size() override;
+    ArrayPriorityQueue() = default;
 
-private:
-    void swap(PriorityQueueItem<T>& a, PriorityQueueItem<T>& b);
-};
+    void insert(T e, T p) override {
+        PriorityQueueItem<T> item = {e, p};
+        array.push_back(item);
+    }
 
-template <class T>
-void ArrayPriorityQueue<T>::swap(PriorityQueueItem<T>& a, PriorityQueueItem<T>& b) {
-  PriorityQueueItem<T> temp = a;
-  a = b;
-  b = temp;
-}
+    T extract_max() override {
+        if (array.count() == 0) {
+            throw std::out_of_range("Kolejka jest pusta");
+        }
 
-template <class T>
-void ArrayPriorityQueue<T>::insert(T e, T p) {
+        int maxIndex = 0;
+        for (int i = 1; i < array.count(); i++) {
+            if (array.get(i) > array.get(maxIndex)) {
+                maxIndex = i;
+            }
+        }
 
-}
+        T value = array.get(maxIndex).value;
+        array.remove(maxIndex);
+        return value;
+    }
 
-template <class T>
-T ArrayPriorityQueue<T>::extract_max() {
-	return 10;
-}
+    T find_max() override {
+        if (array.count() == 0) {
+            throw std::out_of_range("Kolejka jest pusta");
+        }
 
-template <class T>
-T ArrayPriorityQueue<T>::find_max() {
-	return 10;
-}
+        int maxIndex = 0;
+        for (int i = 1; i < array.count(); i++) {
+            if (array.get(i) > array.get(maxIndex)) {
+                maxIndex = i;
+            }
+        }
 
-template <class T>
-void ArrayPriorityQueue<T>::modify_key(T e, T p) {
-    for (int i = 0; i < 1000000; i++) {
-        if (i == e) {
-            // blah blah
-        } else {
-            // blah blah
+        return array.get(maxIndex).value;
+    }
+
+    void modify_key(T e, T p) override {
+        for (int i = 0; i < array.count(); i++) {
+            if (array.get(i).value == e) {
+                array.get(i).priority = p;
+                return;
+            }
         }
     }
-}
 
-template <class T>
-T ArrayPriorityQueue<T>::return_size() {
-	return 0;
-}
+    T return_size() override {
+        return array.count();
+    }
+
+private:
+    ArrayList<PriorityQueueItem<T>> array;
+};

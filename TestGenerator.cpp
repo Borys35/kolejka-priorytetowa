@@ -16,15 +16,16 @@ void generateTests() {
     int sizes[8] = {5000, 8000, 10000, 16000, 20000, 40000, 60000, 100000};
     std::vector<std::string> operacje = {"insert", "extract_max", "find_max", "modify_key", "return_size"};
 
-    file << "nr.,rozmiar,operacja,kopiec,inna\n";
+    file << "rozmiar,operacja,kopiec_avg,tablica_avg\n";
 
     for (int i = 0; i < 8; i++) {
         int size = sizes[i];
         for (const auto& operacja : operacje) {
+            long long totalHeapTime = 0;
+            long long totalArrayTime = 0;
+
             // ilosc testow na jedna operacje
             for (int j = 0; j < 100; j++) {
-                file << j + 1 << "," << size << "," << operacja << ",";
-
                 HeapPriorityQueue<int> heapQueue;
                 ArrayPriorityQueue<int> arrayQueue;
 
@@ -33,7 +34,7 @@ void generateTests() {
                 int *priorityArray = new int[size];
 
                 // Ustawiamy inny seed dla każdego przypadku
-                srand(time(nullptr));
+                srand(time(nullptr) + j);
 
                 fillArray(valueArray, priorityArray, size);
 
@@ -58,7 +59,7 @@ void generateTests() {
                 } else {
                     durationHeap = 0;
                 }
-                file << durationHeap << ",";
+                totalHeapTime += durationHeap;
 
                 // Array Priority Queue
                 long long durationArray;
@@ -75,15 +76,20 @@ void generateTests() {
                 } else {
                     durationArray = 0;
                 }
-                file << durationArray << "\n";
+                totalArrayTime += durationArray;
 
                 delete [] valueArray;
                 delete [] priorityArray;
             }
+            long long avgHeapTime = totalHeapTime / 100;
+            long long avgArrayTime = totalArrayTime / 100;
+
+            file << size << "," << operacja << "," << avgHeapTime << "," << avgArrayTime << "\n";
             std::cout << "Zakonczono testy dla operacji " << operacja << " na rozmiarze " << size << std::endl;
+            std::cout << "  Sredni czas dla kopca: " << avgHeapTime << " ns" << std::endl;
+            std::cout << "  Sredni czas dla tablicy: " << avgArrayTime << " ns" << std::endl;
         }
     }
-
     file.close();
     std::cout << "Wyniki zapisano do pliku data.txt" << std::endl;
 }

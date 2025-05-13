@@ -17,6 +17,7 @@ private:
     void heapify_up(int i);
     void build_max_heap();
     void swap(PriorityQueueItem<T>& a, PriorityQueueItem<T>& b);
+    int find_element_index(T e);
     ArrayList<PriorityQueueItem<T>> heap;
 };
 
@@ -41,13 +42,12 @@ void HeapPriorityQueue<T>::heapify(int i) {
 
 template<class T>
 void HeapPriorityQueue<T>::heapify_up(int i) {
-    int largest = (i - 1) / 2;
-    if (i > 0 && heap.get(i) > heap.get(largest)) {
-        swap(heap.get(i), heap.get(largest));
-        heapify_up(largest);
+    int parent = (i - 1) / 2;
+    if (i > 0 && heap.get(i) > heap.get(parent)) {
+        swap(heap.get(i), heap.get(parent));
+        heapify_up(parent);
     }
 }
-
 
 template <class T>
 void HeapPriorityQueue<T>::build_max_heap() {
@@ -58,47 +58,64 @@ void HeapPriorityQueue<T>::build_max_heap() {
 
 template <class T>
 void HeapPriorityQueue<T>::swap(PriorityQueueItem<T>& a, PriorityQueueItem<T>& b) {
-  PriorityQueueItem<T> temp = a;
-  a = b;
-  b = temp;
+    PriorityQueueItem<T> temp = a;
+    a = b;
+    b = temp;
+}
+
+template <class T>
+int HeapPriorityQueue<T>::find_element_index(T e) {
+    for (int i = 0; i < heap.count(); i++) {
+        if (heap.get(i).value == e) {
+            return i;
+        }
+    }
+    return -1; // nie znaleziono elementu
 }
 
 template <class T>
 void HeapPriorityQueue<T>::insert(T e, T p) {
-	PriorityQueueItem<T> item = {e, p};
-
-	heap.push_back(item);
-
-	heapify_up(heap.count() - 1);
+    PriorityQueueItem<T> item = {e, p};
+    heap.push_back(item);
+    heapify_up(heap.count() - 1);
 }
 
 template <class T>
 T HeapPriorityQueue<T>::extract_max() {
-	swap(heap.get(0), heap.get(heap.count() - 1));
-	PriorityQueueItem<T> max = heap.pop_back();
+    if (heap.count() == 0) {
+        throw std::out_of_range("Kopiec jest pusty");
+    }
 
-	heapify(0);
+    swap(heap.get(0), heap.get(heap.count() - 1));
+    PriorityQueueItem<T> max = heap.pop_back();
 
-	return max.value;
+    if (heap.count() > 0) {
+        heapify(0);
+    }
+
+    return max.value;
 }
 
 template <class T>
 T HeapPriorityQueue<T>::find_max() {
-	return heap.get(0).value;
+    if (heap.count() == 0) {
+        throw std::out_of_range("Kopiec jest pusty");
+    }
+
+    return heap.get(0).value;
 }
 
 template <class T>
 void HeapPriorityQueue<T>::modify_key(T e, T p) {
-    int index = heap.search({e, p});
+    int index = find_element_index(e);
 
     if (index != -1) {
         int oldPriority = heap.get(index).priority;
-
         heap.get(index).priority = p;
 
         if (p > oldPriority) {
             heapify_up(index);
-        } else {
+        } else if (p < oldPriority) {
             heapify(index);
         }
     }
@@ -106,5 +123,5 @@ void HeapPriorityQueue<T>::modify_key(T e, T p) {
 
 template <class T>
 T HeapPriorityQueue<T>::return_size() {
-	return heap.count();
+    return heap.count();
 }

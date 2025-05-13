@@ -6,12 +6,14 @@
 #include <string>
 #include "ArrayList.hpp"
 #include "TestGenerator.hpp"
+#include "HeapPriorityQueue.hpp"
+#include "ArrayPriorityQueue.hpp"
 
 void showMenu() {
     std::cout << "====== MENU ======\n";
     std::cout << "1. Uruchom testy dla wszystkich struktur\n";
-    // std::cout << "2. Operacje na Heap Priority Queue\n";
-    // std::cout << "3. Operacje na Array Priority Queue\n";
+    std::cout << "2. Operacje na kolejkach priorytetowych\n";
+    std::cout << "3. Operacje na Array Priority Queue\n";
     std::cout << "0. Wyjscie\n";
     std::cout << "Wybierz opcje: ";
 }
@@ -28,6 +30,17 @@ void showOperationMenu() {
     std::cout << "8. count - wyswietl liczbe elementow\n";
     std::cout << "9. wyswietl wszystkie elementy\n";
     std::cout << "10. search - wyszukaj element\n";
+    std::cout << "0. Powrot do menu glownego\n";
+    std::cout << "Wybierz operacje: ";
+}
+
+void showPriorityQueueMenu() {
+    std::cout << "\n==== OPERACJE NA KOLEJCE PRIORYTETOWEJ ====\n";
+    std::cout << "1. insert - dodaj element o podanym priorytecie\n";
+    std::cout << "2. extract_max - usun i zwroc element o najwiekszym priorytecie\n";
+    std::cout << "3. find_max - zwroc element o najwiekszym priorytecie\n";
+    std::cout << "4. modify_key - zmien priorytet elementu\n";
+    std::cout << "5. return_size - wyswietl liczbe elementow\n";
     std::cout << "0. Powrot do menu glownego\n";
     std::cout << "Wybierz operacje: ";
 }
@@ -151,6 +164,73 @@ void performListOperations(BaseList<T>& list, const std::string& listName) {
     } while (choice != 0);
 }
 
+template<class T>
+void performPriorityQueueOperations(PriorityQueueBase<T>& queue, const std::string& queueName) {
+    int choice;
+    int value, priority;
+
+    do {
+        showPriorityQueueMenu();
+        std::cin >> choice;
+
+        try {
+            switch (choice) {
+                case 1: // insert
+                    std::cout << "Podaj wartosc elementu: ";
+                    std::cin >> value;
+                    std::cout << "Podaj priorytet elementu: ";
+                    std::cin >> priority;
+                    queue.insert(value, priority);
+                    std::cout << "Dodano element " << value << " o priorytecie " << priority << ".\n";
+                    break;
+
+                case 2: // extract_max
+                    if (queue.return_size() > 0) {
+                        value = queue.extract_max();
+                        std::cout << "Usunieto element " << value << " o najwyzszym priorytecie.\n";
+                    } else {
+                        std::cout << "Kolejka jest pusta!\n";
+                    }
+                    break;
+
+                case 3: // find_max
+                    if (queue.return_size() > 0) {
+                        value = queue.find_max();
+                        std::cout << "Element o najwyzszym priorytecie: " << value << ".\n";
+                    } else {
+                        std::cout << "Kolejka jest pusta!\n";
+                    }
+                    break;
+
+                case 4: // modify_key
+                    std::cout << "Podaj wartosc elementu do modyfikacji: ";
+                    std::cin >> value;
+                    std::cout << "Podaj nowy priorytet: ";
+                    std::cin >> priority;
+                    queue.modify_key(value, priority);
+                    std::cout << "Zmieniono priorytet elementu " << value << " na " << priority << ".\n";
+                    break;
+
+                case 5: // return_size
+                    std::cout << "Liczba elementow w kolejce " << queueName << ": " << queue.return_size() << ".\n";
+                    break;
+
+                case 0:
+                    std::cout << "Powrot do menu glownego.\n";
+                    break;
+
+                default:
+                    std::cout << "Niepoprawny wybor!\n";
+            }
+        } catch (const std::out_of_range& e) {
+            std::cout << "Blad: " << e.what() << "\n";
+        } catch (...) {
+            std::cout << "Wystapil nieznany blad!\n";
+        }
+
+    } while (choice != 0);
+}
+
 void runMenu() {
     int choice;
 
@@ -164,29 +244,27 @@ void runMenu() {
                 generateTests();
                 break;
 
-/*
             case 2: {
-                std::cout << "Wybrano operacje na ArrayList\n";
-                ArrayList<int> arrayList;
-                performListOperations(arrayList, "ArrayList");
+                int queueChoice;
+                std::cout << "Wybierz typ kolejki priorytetowej:\n";
+                std::cout << "1. HeapPriorityQueue (Kolejka oparta na kopcu)\n";
+                std::cout << "2. ArrayPriorityQueue (Kolejka oparta na tablicy)\n";
+                std::cout << "Wybor: ";
+                std::cin >> queueChoice;
+
+                if (queueChoice == 1) {
+                    HeapPriorityQueue<int> heapQueue;
+                    std::cout << "Wybrano HeapPriorityQueue\n";
+                    performPriorityQueueOperations(heapQueue, "HeapPriorityQueue");
+                } else if (queueChoice == 2) {
+                    ArrayPriorityQueue<int> arrayQueue;
+                    std::cout << "Wybrano ArrayPriorityQueue\n";
+                    performPriorityQueueOperations(arrayQueue, "ArrayPriorityQueue");
+                } else {
+                    std::cout << "Niepoprawny wybor!\n";
+                }
                 break;
             }
-
-            case 3: {
-                std::cout << "Wybrano operacje na SinglyLinkedList\n";
-                SinglyLinkedList<int> singlyLinkedList;
-                performListOperations(singlyLinkedList, "SinglyLinkedList");
-                break;
-            }
-
-            case 4: {
-                std::cout << "Wybrano operacje na DoublyLinkedList\n";
-                DoublyLinkedList<int> doublyLinkedList;
-                performListOperations(doublyLinkedList, "DoublyLinkedList");
-                break;
-            }
-
- */
 
             case 0:
                 std::cout << "Koniec programu.\n";
@@ -200,3 +278,4 @@ void runMenu() {
 }
 
 template void performListOperations<int>(BaseList<int>& list, const std::string& listName);
+template void performPriorityQueueOperations<int>(PriorityQueueBase<int>& queue, const std::string& queueName);

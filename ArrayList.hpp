@@ -46,7 +46,7 @@ template<class T>
 void ArrayList<T>::increase_size() {
     max_size *= 2;
     T *temp = new T[max_size];
-    for (int i = 0; i < size - 1; i++) {
+    for (int i = 0; i < size; i++) {
         temp[i] = array[i];
     }
     delete[] array;
@@ -55,45 +55,44 @@ void ArrayList<T>::increase_size() {
 
 template<class T>
 void ArrayList<T>::push_back(T value) {
-    size++;
-    if (size > max_size) {
+    if (size >= max_size) {
         increase_size();
     }
-    array[size - 1] = value;
+    array[size] = value;
+    size++;
 }
 
 template<class T>
 void ArrayList<T>::push_front(T value) {
-    size++;
-    if (size > max_size) {
+    if (size >= max_size) {
         increase_size();
     }
-    for (int i = size - 1; i > 0; i--) {
+    for (int i = size; i > 0; i--) {
         array[i] = array[i - 1];
     }
     array[0] = value;
+    size++;
 }
 
 template<class T>
 T ArrayList<T>::pop_back() {
-	size--;
-	if (size < 1) {
+    if (size <= 0) {
         throw std::out_of_range("ArrayList");
-	}
-	T value = array[size - 1];
-	return value;
+    }
+    size--;
+    return array[size];
 }
 
 template<class T>
 void ArrayList<T>::insert(T value, int index) {
-    size++;
-    if (size > max_size) {
+    if (size >= max_size) {
         increase_size();
     }
-    for (int i = size - 1; i > index; i--) {
+    for (int i = size; i > index; i--) {
         array[i] = array[i - 1];
     }
     array[index] = value;
+    size++;
 }
 
 template<class T>
@@ -105,6 +104,7 @@ T ArrayList<T>::remove_front() {
     for (int i = 1; i < size; i++) {
         array[i - 1] = array[i];
     }
+    size--;
     return v;
 }
 
@@ -114,7 +114,6 @@ T ArrayList<T>::remove_back() {
         throw std::out_of_range("ArrayList");
     }
     T v = array[size - 1];
-    array[size - 1] = {-1, -1};
     size--;
     return v;
 }
@@ -122,17 +121,20 @@ T ArrayList<T>::remove_back() {
 
 template<class T>
 T ArrayList<T>::remove(int index) {
-    size--;
+    if (index < 0 || index >= size) {
+        throw std::out_of_range("ArrayList");
+    }
     T v = array[index];
     for (int i = index; i < size - 1; i++) {
         array[i] = array[i + 1];
     }
+    size--;
     return v;
 }
 
 template<class T>
 T& ArrayList<T>::get(int index) {
-    if (index > size - 1 || index < 0) {
+    if (index >= size || index < 0) {
         throw std::out_of_range("ArrayList");
     }
     return array[index];
